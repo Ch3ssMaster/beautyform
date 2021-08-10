@@ -16,11 +16,11 @@ export const GlobalStyle = createGlobalStyle`
 	border: 0;
   }  
   body {    
-      background-color: #ebebeb;  
-    }
-    form {
+    background-color: #ebebeb;  
+  }
+  form {
     font-family: 'Rubik', sans-serif;
-}
+  }
 `;
 
 export const Box = styled.div`
@@ -32,6 +32,14 @@ export const Box = styled.div`
   padding: 1rem 3rem;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
 `;
+
+export const SmallParagraph = styled.p`
+  font-size: 1.325rem;
+  font-weight: bold;
+  color: #fff;
+`;
+
+// Form fields
 
 export const InputGroup = styled.div`
   display: flex;
@@ -57,17 +65,24 @@ export const Label = styled.label.attrs((props) => ({
 `;
 
 export const Input = styled.input.attrs((props) => ({
+  id: props.id,
   type: props.type,
   name: props.name,
   placeholder: props.placeholder,
+  valid: props.valid,
 }))`
   border: #1c1e21;
-  background-color: #f2f1f7;
+  background-color: ${(props) => (props.valid ? "#f2f1f7" : "#db504a")};
   width: 100%;
   font-size: 1.5rem;
   padding: 0.2rem 0.5rem;
   border-top-left-radius: 0.2rem;
   border-bottom-left-radius: 0.2rem;
+  ${(props) =>
+    !props.valid &&
+    `::placeholder{
+      color:#fff;
+      opacity: .7;`}
 
   &:focus {
     border: none;
@@ -97,7 +112,7 @@ export const Checkbox = styled.input.attrs({ type: "checkbox" })`
 `;
 
 export const Button = styled.button.attrs((props) => ({
-  disabled: true,
+  disabled: props.disabled,
 }))`
   width: 100%;
   font-family: "Georama", sans-serif;
@@ -117,7 +132,8 @@ export const Button = styled.button.attrs((props) => ({
   }
 
   &:hover:enabled {
-    box-shadow: 0 0 10px 0 #ff7b19 inset, 0 0 10px 4px #ff7b19;
+    background-color: #da402b;
+    box-shadow: 0 0 10px 0 #fb4c1f inset, 0 0 10px 4px #fb4c1f;
   }
 `;
 
@@ -130,6 +146,14 @@ export const IconBox = styled.span`
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
   }
+`;
+
+// Form validation
+export const NoticeParagraph = styled.p`
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #ff5e5b;
 `;
 
 // Icons
