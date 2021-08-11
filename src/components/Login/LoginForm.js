@@ -4,7 +4,10 @@ import {
   validateName,
   validatePassword,
   passwordsMatch,
+  validateDate,
+  validateAge,
 } from "../../lib/validation";
+import { getDateRange, compareDateAndAge } from "../../lib/manageDates";
 import {
   Checkbox,
   IconBox,
@@ -19,18 +22,35 @@ import {
 } from "../../styled/styled";
 
 const LoginForm = () => {
+  const minDate = getDateRange(true, 100);
+  const maxDate = getDateRange(false, 18);
   const name = useRef("");
   const password = useRef("");
   const password2 = useRef("");
+  const datePicker = useRef("");
   const age = useRef("");
-  const [acceptTerms, setAcceptTerms] = useState(false);
+
   const [disabledButton, setButtonEnabled] = useState(true);
   const [validatedName, setValidatedName] = useState(true);
   const [validatedPassword, setValidatedPassword] = useState(true);
   const [validatedPasswordMatch, setValidatedPasswordMatch] = useState(true);
+  const [validatedDate, setValidatedDate] = useState(true);
+  const [validatedAge, setValidatedAge] = useState(true);
+  const [datesMatch, setDatesMatch] = useState(true);
+  const [acceptTerms, setAcceptTerms] = useState(false);
 
   const loginFormHandler = (event) => {
     event.preventDefault();
+    const accountData = {
+      userName: name.current.value,
+      password: password.current.value,
+      birthDate: datePicker.current.value,
+    };
+    console.log(
+      "Congratulations! Your new account have been successfully created."
+    );
+    console.log("Your account details:");
+    console.log(JSON.stringify(accountData));
   };
 
   const inputChangeHandler = (event) => {
@@ -42,19 +62,40 @@ const LoginForm = () => {
       }
       if (event.target.id === "password") {
         setValidatedPassword(validatePassword(password.current.value));
+        setValidatedPasswordMatch(
+          passwordsMatch(password.current.value, password2.current.value)
+        );
       }
       if (event.target.id === "password2") {
         setValidatedPasswordMatch(
           passwordsMatch(password.current.value, password2.current.value)
         );
-        console.log("running!");
       }
+      if (event.target.id === "datePicker") {
+        setValidatedDate(
+          validateDate(datePicker.current.value, minDate, maxDate)
+        );
+      }
+      if (event.target.id === "age") {
+        setValidatedAge(validateAge(age.current.value));
+      }
+
+      if (validatedDate && validatedDate) {
+        setDatesMatch(
+          compareDateAndAge(datePicker.current.value, age.current.value)
+        );
+      }
+
       setButtonEnabled(
         !validatedName ||
-          !validatedPassword ||
           isEmpty(name.current.value) ||
+          !validatedPassword ||
           isEmpty(password.current.value) ||
+          !validatedPasswordMatch ||
+          !validatedDate ||
+          !validatedAge ||
           isEmpty(age.current.value) ||
+          !datesMatch ||
           !acceptTerms
       );
     }
@@ -63,14 +104,25 @@ const LoginForm = () => {
   useEffect(() => {
     setButtonEnabled(
       !validatedName ||
-        !validatedPassword ||
-        !validatedPasswordMatch ||
         isEmpty(name.current.value) ||
+        !validatedPassword ||
         isEmpty(password.current.value) ||
+        !validatedPasswordMatch ||
+        !validatedDate ||
+        !validatedAge ||
         isEmpty(age.current.value) ||
+        !datesMatch ||
         !acceptTerms
     );
-  }, [validatedName, validatedPassword, validatedPasswordMatch, acceptTerms]);
+  }, [
+    validatedName,
+    validatedPassword,
+    validatedPasswordMatch,
+    validatedDate,
+    validatedAge,
+    datesMatch,
+    acceptTerms,
+  ]);
 
   return (
     <form onSubmit={loginFormHandler}>
@@ -128,24 +180,48 @@ const LoginForm = () => {
         <NoticeParagraph>Passwords do not match.</NoticeParagraph>
       )}
       <InputGroup>
-        <Input type="date" valid={true} />
+        <Input
+          ref={datePicker}
+          type="date"
+          min={minDate}
+          max={maxDate}
+          onChange={inputChangeHandler}
+          valid={validatedDate}
+          id="datePicker"
+        />
       </InputGroup>
+      {!validatedDate && (
+        <NoticeParagraph>
+          Please pick a valid date (between {minDate} and {maxDate}).
+        </NoticeParagraph>
+      )}
       <InputGroup>
         <Input
           ref={age}
+          onChange={inputChangeHandler}
           type="number"
           placeholder="Age (numbers between 18 and 100)"
           min="18"
           max="100"
           step="1"
-          valid={false}
+          valid={validatedAge}
           id="age"
-          onChange={inputChangeHandler}
         />
         <IconBox>
           <DateIcon size="40" title="Set your age" />
         </IconBox>
       </InputGroup>
+      {!validatedAge && (
+        <NoticeParagraph>
+          Please pick a valid age (between 18 and 100).
+        </NoticeParagraph>
+      )}
+      {!datesMatch && (
+        <NoticeParagraph>
+          The year of bird and your age do not match. Please modify date of bird
+          or age.
+        </NoticeParagraph>
+      )}
       <Label htmlFor="terms">
         <Checkbox
           name="terms"
@@ -154,7 +230,9 @@ const LoginForm = () => {
         />
         Accept terms
       </Label>
-      <NoticeParagraph>You must agree before submitting.</NoticeParagraph>
+      {!acceptTerms && (
+        <NoticeParagraph>You must agree before submitting.</NoticeParagraph>
+      )}
       <Button disabled={disabledButton}>New Account!</Button>
     </form>
   );
