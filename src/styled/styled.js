@@ -4,6 +4,7 @@ import { StyledIconBase } from "@styled-icons/styled-icon";
 import { UserCircle } from "@styled-icons/boxicons-solid/UserCircle";
 import { EyeFill } from "@styled-icons/bootstrap/EyeFill";
 import { Calendar2Date } from "@styled-icons/bootstrap/Calendar2Date";
+import { CloseCircleOutline } from "@styled-icons/evaicons-outline/CloseCircleOutline";
 
 export const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Georama:wght@800&family=Rubik&display=swap');
@@ -156,7 +157,7 @@ export const NoticeParagraph = styled.p`
   color: #ff5e5b;
 `;
 
-// Icons
+// Form Icons
 export const UserIcon = styled(UserCircle).attrs((props) => ({
   title: props.title,
   size: props.size,
@@ -169,3 +170,53 @@ export const DateIcon = styled(Calendar2Date).attrs((props) => ({
   title: props.title,
   size: props.size,
 }))``;
+
+// Modal view
+
+export const BackDrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.75);
+`;
+
+export const SuccessModal = styled.div`
+  position: fixed;
+  top: 30vh;
+  left: 20%;
+  width: 60%;
+  z-index: 100;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ebebeb;
+  padding: 1rem 1rem 3rem;
+  background-color: #2a9d8f;
+  font-weight: bold;
+  border-radius: 20px;
+  font-family: "Rubik", sans-serif;
+  font-size: 2.2rem;
+  -webkit-transform: ${(props) => (props.active ? "scale(1)" : "scale(0.7)")};
+  -moz-transform: ${(props) => (props.active ? "scale(1)" : "scale(0.7)")};
+  -ms-transform: ${(props) => (props.active ? "scale(1)" : "scale(0.7)")};
+  transform: ${(props) => (props.active ? "scale(1)" : "scale(0.7)")};
+  opacity: ${(props) => (props.active ? 1 : 0)};
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s 1s;
+`;
+
+export const CloseModal = styled(CloseCircleOutline).attrs((props) => ({
+  onClick: props.onClick,
+  title: props.title,
+  size: props.size,
+}))`
+  color: #b80c09;
+  align-self: flex-end;
+  margin-bottom: 2%;
+  opacity: 0.8;
+`;

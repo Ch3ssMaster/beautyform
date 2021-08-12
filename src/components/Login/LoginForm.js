@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import SignInModal from "../UI/SignInModal";
 import {
   isEmpty,
   validateName,
@@ -38,6 +39,9 @@ const LoginForm = () => {
   const [validatedAge, setValidatedAge] = useState(true);
   const [datesMatch, setDatesMatch] = useState(true);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [inputType, setInputType] = useState("password");
+  const [inputTypePassword2, setInputTypePassword2] = useState("password");
+  const [showModal, showModalState] = useState(false);
 
   const loginFormHandler = (event) => {
     event.preventDefault();
@@ -51,6 +55,7 @@ const LoginForm = () => {
     );
     console.log("Your account details:");
     console.log(JSON.stringify(accountData));
+    showModalState(true);
   };
 
   const inputChangeHandler = (event) => {
@@ -101,6 +106,15 @@ const LoginForm = () => {
     }
   };
 
+  const showPasswordHandler = () => {
+    setInputType(inputType === "password" ? "text" : "password");
+  };
+  const showPasswordHandler2 = () => {
+    setInputTypePassword2(
+      inputTypePassword2 === "password" ? "text" : "password"
+    );
+  };
+
   useEffect(() => {
     setButtonEnabled(
       !validatedName ||
@@ -125,116 +139,119 @@ const LoginForm = () => {
   ]);
 
   return (
-    <form onSubmit={loginFormHandler}>
-      <InputGroup>
-        <Input
-          ref={name}
-          onChange={inputChangeHandler}
-          type="text"
-          placeholder="Enter your name"
-          valid={validatedName}
-          id="name"
-        />
-        <IconBox>
-          <UserIcon size="40" title="Your name" />
-        </IconBox>
-      </InputGroup>
-      {!validatedName && (
-        <NoticeParagraph>
-          Please choose a valid name (6 chars at least).
-        </NoticeParagraph>
-      )}
-      <InputGroup>
-        <Input
-          ref={password}
-          onChange={inputChangeHandler}
-          type="password"
-          placeholder="Enter your password"
-          valid={validatedPassword}
-          id="password"
-        />
-        <IconBox>
-          <EyeIcon size="40" title="Show password" />
-        </IconBox>
-      </InputGroup>
-      {!validatedPassword && (
-        <NoticeParagraph>
-          Please provide a password at least with 8 characters, including
-          lowers, uppers and numbers.
-        </NoticeParagraph>
-      )}
-      <InputGroup>
-        <Input
-          ref={password2}
-          onChange={inputChangeHandler}
-          type="password"
-          placeholder="Re-enter your password"
-          valid={validatedPasswordMatch}
-          id="password2"
-        />
-        <IconBox>
-          <EyeIcon size="40" title="Show password" />
-        </IconBox>
-      </InputGroup>
-      {!validatedPasswordMatch && (
-        <NoticeParagraph>Passwords do not match.</NoticeParagraph>
-      )}
-      <InputGroup>
-        <Input
-          ref={datePicker}
-          type="date"
-          min={minDate}
-          max={maxDate}
-          onChange={inputChangeHandler}
-          valid={validatedDate}
-          id="datePicker"
-        />
-      </InputGroup>
-      {!validatedDate && (
-        <NoticeParagraph>
-          Please pick a valid date (between {minDate} and {maxDate}).
-        </NoticeParagraph>
-      )}
-      <InputGroup>
-        <Input
-          ref={age}
-          onChange={inputChangeHandler}
-          type="number"
-          placeholder="Age (numbers between 18 and 100)"
-          min="18"
-          max="100"
-          step="1"
-          valid={validatedAge}
-          id="age"
-        />
-        <IconBox>
-          <DateIcon size="40" title="Set your age" />
-        </IconBox>
-      </InputGroup>
-      {!validatedAge && (
-        <NoticeParagraph>
-          Please pick a valid age (between 18 and 100).
-        </NoticeParagraph>
-      )}
-      {!datesMatch && (
-        <NoticeParagraph>
-          The year of bird and your age do not match. Please modify date of bird
-          or age.
-        </NoticeParagraph>
-      )}
-      <Label htmlFor="terms">
-        <Checkbox
-          name="terms"
-          checked={acceptTerms}
-          onChange={inputChangeHandler}
-        />
-        Accept terms
-      </Label>
-      {!acceptTerms && (
-        <NoticeParagraph>You must agree before submitting.</NoticeParagraph>
-      )}
-      <Button disabled={disabledButton}>New Account!</Button>
-    </form>
+    <React.Fragment>
+      {showModal && <SignInModal onShow={showModalState} active={showModal} />}
+      <form onSubmit={loginFormHandler}>
+        <InputGroup>
+          <Input
+            ref={name}
+            onChange={inputChangeHandler}
+            type="text"
+            placeholder="Enter your name"
+            valid={validatedName}
+            id="name"
+          />
+          <IconBox>
+            <UserIcon size="40" title="Your name" />
+          </IconBox>
+        </InputGroup>
+        {!validatedName && (
+          <NoticeParagraph>
+            Please choose a valid name (6 chars at least).
+          </NoticeParagraph>
+        )}
+        <InputGroup>
+          <Input
+            ref={password}
+            onChange={inputChangeHandler}
+            type={inputType}
+            placeholder="Enter your password"
+            valid={validatedPassword}
+            id="password"
+          />
+          <IconBox onClick={showPasswordHandler}>
+            <EyeIcon size="40" title="Show password" />
+          </IconBox>
+        </InputGroup>
+        {!validatedPassword && (
+          <NoticeParagraph>
+            Please provide a password at least with 8 characters, including
+            lowers, uppers and numbers.
+          </NoticeParagraph>
+        )}
+        <InputGroup>
+          <Input
+            ref={password2}
+            onChange={inputChangeHandler}
+            type={inputTypePassword2}
+            placeholder="Re-enter your password"
+            valid={validatedPasswordMatch}
+            id="password2"
+          />
+          <IconBox onClick={showPasswordHandler2}>
+            <EyeIcon size="40" title="Show password" />
+          </IconBox>
+        </InputGroup>
+        {!validatedPasswordMatch && (
+          <NoticeParagraph>Passwords do not match.</NoticeParagraph>
+        )}
+        <InputGroup>
+          <Input
+            ref={datePicker}
+            type="date"
+            min={minDate}
+            max={maxDate}
+            onChange={inputChangeHandler}
+            valid={validatedDate}
+            id="datePicker"
+          />
+        </InputGroup>
+        {!validatedDate && (
+          <NoticeParagraph>
+            Please pick a valid date (between {minDate} and {maxDate}).
+          </NoticeParagraph>
+        )}
+        <InputGroup>
+          <Input
+            ref={age}
+            onChange={inputChangeHandler}
+            type="number"
+            placeholder="Age (numbers between 18 and 100)"
+            min="18"
+            max="100"
+            step="1"
+            valid={validatedAge}
+            id="age"
+          />
+          <IconBox>
+            <DateIcon size="40" title="Set your age" />
+          </IconBox>
+        </InputGroup>
+        {!validatedAge && (
+          <NoticeParagraph>
+            Please pick a valid age (between 18 and 100).
+          </NoticeParagraph>
+        )}
+        {!datesMatch && (
+          <NoticeParagraph>
+            The year of bird and your age do not match. Please modify date of
+            bird or age.
+          </NoticeParagraph>
+        )}
+        <Label htmlFor="terms">
+          <Checkbox
+            name="terms"
+            checked={acceptTerms}
+            onChange={inputChangeHandler}
+          />
+          Accept terms
+        </Label>
+        {!acceptTerms && (
+          <NoticeParagraph>You must agree before submitting.</NoticeParagraph>
+        )}
+        <Button disabled={disabledButton}>New Account!</Button>
+      </form>
+    </React.Fragment>
   );
 };
 
