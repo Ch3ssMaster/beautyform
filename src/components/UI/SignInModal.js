@@ -4,7 +4,6 @@ import { BackDrop, SuccessModal, CloseModal } from "../../styled/styled";
 
 const SignInModal = (props) => {
   const closeModalHandler = () => {
-    console.log("running!");
     setActiveClass("");
     setCloseClass("close");
   };
