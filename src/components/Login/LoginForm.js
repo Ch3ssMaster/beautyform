@@ -152,7 +152,7 @@ const LoginForm = () => {
             id="name"
           />
           <IconBox>
-            <UserIcon size="40" title="Your name" />
+            <UserIcon title="Your name" />
           </IconBox>
         </InputGroup>
         {!validatedName && (
@@ -170,7 +170,7 @@ const LoginForm = () => {
             id="password"
           />
           <IconBox onClick={showPasswordHandler}>
-            <EyeIcon size="40" title="Show password" />
+            <EyeIcon title="Show password" />
           </IconBox>
         </InputGroup>
         {!validatedPassword && (
@@ -189,7 +189,7 @@ const LoginForm = () => {
             id="password2"
           />
           <IconBox onClick={showPasswordHandler2}>
-            <EyeIcon size="40" title="Show password" />
+            <EyeIcon title="Show password" />
           </IconBox>
         </InputGroup>
         {!validatedPasswordMatch && (
@@ -203,6 +203,7 @@ const LoginForm = () => {
             max={maxDate}
             onChange={inputChangeHandler}
             valid={validatedDate}
+            radius={true}
             id="datePicker"
           />
         </InputGroup>
@@ -224,7 +225,7 @@ const LoginForm = () => {
             id="age"
           />
           <IconBox>
-            <DateIcon size="40" title="Set your age" />
+            <DateIcon title="Set your age" />
           </IconBox>
         </InputGroup>
         {!validatedAge && (

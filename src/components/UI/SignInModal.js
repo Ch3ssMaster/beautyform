@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactDom from "react-dom";
 import { BackDrop, SuccessModal, CloseModal } from "../../styled/styled";
 
 const SignInModal = (props) => {
-  const closeModalHandler = () => {
+  const [activeClass, setActiveClass] = useState(props.active);
+  const [closeClass, setCloseClass] = useState("");
+  
+  const closeModalHandler = useCallback(() => {
     setActiveClass("");
     setCloseClass("close");
-  };
-  const [activeClass, setActiveClass] = useState("");
-  const [closeClass, setCloseClass] = useState("");
+  }, []);
 
   useEffect(() => {
-    if (props.active && closeClass === "") {
+    if (activeClass && closeClass === "") {
       setActiveClass("active");
       setCloseClass("");
     } else {
@@ -20,7 +21,7 @@ const SignInModal = (props) => {
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [props.active, closeClass]);
+  }, [activeClass, closeClass, props]);
 
   return (
     <React.Fragment>
