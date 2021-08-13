@@ -200,14 +200,29 @@ export const SuccessModal = styled.div`
   border-radius: 20px;
   font-family: "Rubik", sans-serif;
   font-size: 2.2rem;
-  -webkit-transform: ${(props) => (props.active ? "scale(1)" : "scale(0.7)")};
-  -moz-transform: ${(props) => (props.active ? "scale(1)" : "scale(0.7)")};
-  -ms-transform: ${(props) => (props.active ? "scale(1)" : "scale(0.7)")};
-  transform: ${(props) => (props.active ? "scale(1)" : "scale(0.7)")};
-  opacity: ${(props) => (props.active ? 1 : 0)};
+  -webkit-transform: scale(0.7);
+  -moz-transform: scale(0.7);
+  -ms-transform: scale(0.7);
+  transform: scale(0.7);
+  opacity: 0;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
-  transition: all 0.3s 1s;
+  transition: all 0.3s;
+
+  &.active {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+  &.close {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    opacity: 0;
+  }
 `;
 
 export const CloseModal = styled(CloseCircleOutline).attrs((props) => ({
